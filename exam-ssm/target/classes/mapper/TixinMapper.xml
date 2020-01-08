@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ssm.dao.TixinMapper">
+  <resultMap id="BaseResultMap" type="ssm.model.Tixin">
+    <result column="TixinId" jdbcType="INTEGER" property="tixinid" />
+    <result column="TixinName" jdbcType="VARCHAR" property="tixinname" />
+      <result column="CouId" javaType="INTEGER" property="couid"/>
+  </resultMap>
+  <!-- 自定义方法 -->
+  <select id="findAll" resultType="tixin">
+      select * from tixin
+  </select>
+
+    <select id="" resultType="tixin">
+        select * from tixin,course where course.CouId=tixin.CouId and course.CouId=#{couid}
+    </select>
+
+    <select id="queryfind" resultType="tixin">
+        select * from tixin
+        <where>
+            <if test="#{query}!=null">
+                ${type} like CONCAT('%',#{query},'%')
+            </if>
+        </where>
+    </select>
+  
+   <select id="getById" resultType="tixin">
+      select * from tixin where  TixinId=#{txid}
+  </select> 
+  
+  <select id="getByNam" resultType="tixin">
+      select * from tixin where  TixinName=#{tixinname}
+  </select> 
+  
+  <delete id="deleteByid">
+      delete from tixin where TixinId=#{txid}
+  </delete>
+  
+  <update id="updateByid" >
+      update tixin set TixinId=#{tixinid},TixinName=#{tixinname} where TixinId=#{tixinid} 
+  </update>
+  
+  <insert id="addTixin" >
+      insert into tixin values(#{tixinid},#{tixinname}) 
+  </insert>
+
+    <select id="getByTinXinId" resultType="tixin">
+        select * from tixin where TiXinId=#{tixinid}
+    </select>
+
+    <resultMap type="ssm.model.Tixin" id="TixinResultMap">
+        <result column="TixinId" jdbcType="INTEGER" property="tixinid" />
+        <result column="TixinName" jdbcType="VARCHAR" property="tixinname" />
+        <result column="CouId" javaType="INTEGER" property="couid"/>
+        <association property="course" javaType="ssm.model.Course">
+            <id column="CouId" jdbcType="INTEGER" property="couid" />
+            <result column="CouName" jdbcType="VARCHAR" property="couname" />
+            <result column="Credit" jdbcType="INTEGER" property="credit" />
+        </association>
+    </resultMap>
+  <!-- <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    TixinId, TixinName
+  </sql>
+  <select id="selectByExample" parameterType="ssm.model.TixinExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tixin
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="ssm.model.TixinExample">
+    delete from tixin
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="ssm.model.Tixin">
+    insert into tixin (TixinId, TixinName)
+    values (#{tixinid,jdbcType=INTEGER}, #{tixinname,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="ssm.model.Tixin">
+    insert into tixin
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="tixinid != null">
+        TixinId,
+      </if>
+      <if test="tixinname != null">
+        TixinName,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="tixinid != null">
+        #{tixinid,jdbcType=INTEGER},
+      </if>
+      <if test="tixinname != null">
+        #{tixinname,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="ssm.model.TixinExample" resultType="java.lang.Long">
+    select count(*) from tixin
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tixin
+    <set>
+      <if test="record.tixinid != null">
+        TixinId = #{record.tixinid,jdbcType=INTEGER},
+      </if>
+      <if test="record.tixinname != null">
+        TixinName = #{record.tixinname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tixin
+    set TixinId = #{record.tixinid,jdbcType=INTEGER},
+      TixinName = #{record.tixinname,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <resultMap id="BaseResultMap" type="ssm.model.Tixin">
+    <result column="TixinId" jdbcType="INTEGER" property="tixinid" />
+    <result column="TixinName" jdbcType="VARCHAR" property="tixinname" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    TixinId, TixinName
+  </sql>
+  <select id="selectByExample" parameterType="ssm.model.TixinExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tixin
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="ssm.model.TixinExample">
+    delete from tixin
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="ssm.model.Tixin">
+    insert into tixin (TixinId, TixinName)
+    values (#{tixinid,jdbcType=INTEGER}, #{tixinname,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="ssm.model.Tixin">
+    insert into tixin
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="tixinid != null">
+        TixinId,
+      </if>
+      <if test="tixinname != null">
+        TixinName,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="tixinid != null">
+        #{tixinid,jdbcType=INTEGER},
+      </if>
+      <if test="tixinname != null">
+        #{tixinname,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="ssm.model.TixinExample" resultType="java.lang.Long">
+    select count(*) from tixin
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tixin
+    <set>
+      <if test="record.tixinid != null">
+        TixinId = #{record.tixinid,jdbcType=INTEGER},
+      </if>
+      <if test="record.tixinname != null">
+        TixinName = #{record.tixinname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tixin
+    set TixinId = #{record.tixinid,jdbcType=INTEGER},
+      TixinName = #{record.tixinname,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update> -->
+</mapper>

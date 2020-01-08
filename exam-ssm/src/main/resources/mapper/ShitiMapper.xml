@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ssm.dao.ShitiMapper">
+    <resultMap id="BaseResultMap" type="ssm.model.Shiti">
+        <result column="ShiTiId" jdbcType="INTEGER" property="shitiid" />
+        <result column="CouId" jdbcType="INTEGER" property="couid" />
+        <result column="TixinId" jdbcType="INTEGER" property="tixinid" />
+        <result column="KnpoId" jdbcType="INTEGER" property="knpoid" />
+        <result column="Content" jdbcType="VARCHAR" property="content" />
+        <result column="chart" jdbcType="VARCHAR" property="chart" />
+        <result column="Answer" jdbcType="VARCHAR" property="answer" />
+        <result column="difficulty" jdbcType="DOUBLE" property="difficulty" />
+        <result column="discriminativePower" jdbcType="DOUBLE" property="qufen" />
+        <result column="AveTime" jdbcType="DOUBLE" property="avetim" />
+        <result column="testNumber" jdbcType="INTEGER" property="testnumber" />
+        <result column="correctNumber" jdbcType="DOUBLE" property="correctnumber" />
+    </resultMap>
+
+    <!-- 自定义方法 -->
+    <select id="findAll" resultType="shiti">
+      select * from shiti
+  </select>
+    <select id="findAll2" resultType="shiti">
+      select * from shiti
+  </select>
+    <select id="getByShiTiId" resultType="shiti">
+       SELECT * FROM shiti where shiti.ShiTiId=#{shitiid}
+    </select>
+    <select id="">
+
+    </select>
+</mapper>

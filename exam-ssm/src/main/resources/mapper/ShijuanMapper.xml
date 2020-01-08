@@ -1,0 +1,520 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ssm.dao.ShijuanMapper">
+  <resultMap id="BaseResultMap" type="ssm.model.Shijuan">
+    <result column="ShijuanId" jdbcType="INTEGER" property="shijuanid" />
+    <result column="CouId" jdbcType="INTEGER" property="couid" />
+    <result column="ExamDay" jdbcType="TIMESTAMP" property="examday" />
+    <result column="ExamTime" jdbcType="VARCHAR" property="examtime" />
+    <result column="ExamAdr" jdbcType="VARCHAR" property="examadr" />
+    <result column="ClassId" jdbcType="INTEGER" property="classid" />
+    <result column="TixinId" jdbcType="INTEGER" property="tixinid" />
+    <result column="TixinScore" jdbcType="INTEGER" property="tixinscore" />
+    <result column="ToalScore" jdbcType="INTEGER" property="toalscore" />
+    <result column="ZujuUser" jdbcType="VARCHAR" property="zujuuser" />
+  </resultMap>
+  
+  <!-- 自定义方法 -->
+  
+  <select id="findAll" resultMap="ShijuanResultMap">
+      select * from shijuan,course,class,tixin, where 
+      shijuan.TixinId=tixin.TixinId and shijuan.CouId=course.CouId 
+      and shijuan.ClassId=class.ClassId
+  </select>
+    <select id="getByTeaid" resultMap="ShijuanResultMap">
+        SELECT * FROM course,class,shijuan,teatask
+      WHERE shijuan.ClassId =class.ClassId AND course.CouId = shijuan.CouId and teatask.CouId=course.CouId
+      AND teatask.TeaId=#{teaid}
+    </select>
+  <select id="getByCouid" resultMap="ShijuanResultMap">
+      select * from shijuan,course,class,tixin where 
+      shijuan.TixinId=tixin.TixinId and shijuan.CouId=course.CouId 
+      and shijuan.ClassId=class.ClassId and shijuan.CouId=#{couid}
+  </select>
+  
+  
+  <!-- 使用resultMap映射实体类和字段之间的一一对应关系 -->
+  <resultMap type="ssm.model.Shijuan" id="ShijuanResultMap">
+        <result column="ShijuanId" jdbcType="INTEGER" property="shijuanid" />
+	    <result column="CouId" jdbcType="INTEGER" property="couid" />
+	    <result column="ExamDay" jdbcType="TIMESTAMP" property="examday" />
+	    <result column="ExamTime" jdbcType="VARCHAR" property="examtime" />
+	    <result column="ExamAdr" jdbcType="VARCHAR" property="examadr" />
+	    <result column="ClassId" jdbcType="INTEGER" property="classid" />
+	    <result column="TixinId" jdbcType="INTEGER" property="tixinid" />
+	    <result column="TixinScore" jdbcType="INTEGER" property="tixinscore" />
+	    <result column="ToalScore" jdbcType="INTEGER" property="toalscore" />
+	    <result column="ZujuUser" jdbcType="VARCHAR" property="zujuuser" />
+	    <association property="course" javaType="ssm.model.Course">
+            <id column="CouId" jdbcType="INTEGER" property="couid" />
+		    <result column="CouName" jdbcType="VARCHAR" property="couname" />
+		    <result column="Credit" jdbcType="INTEGER" property="credit" />
+        </association>
+        <association property="clas" javaType="ssm.model.Class">
+            <id column="ClassId" jdbcType="INTEGER" property="classid" />
+		    <result column="ClaName" jdbcType="VARCHAR" property="claname" />
+		    <result column="ProId" jdbcType="INTEGER" property="proid" />
+        </association> 	         
+        <association property="tixin" javaType="ssm.model.Tixin">
+            <id column="TixinId" jdbcType="INTEGER" property="tixinid" />
+            <result column="TixinName" jdbcType="VARCHAR" property="tixinname" />
+        </association>
+      <association property="teatask" javaType="ssm.model.Teatask">
+          <id column="Term" jdbcType="VARCHAR" property="term" />
+          <result column="TeaId" jdbcType="INTEGER" property="teaid" />
+          <result column="CouId" jdbcType="INTEGER" property="couid" />
+          <result column="ClassId" jdbcType="INTEGER" property="classid" />
+      </association>
+               
+    </resultMap>
+  <!-- <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ShijuanId, CouId, ExamDay, ExamTime, ExamAdr, ClassId, TixinId, TixinScore, ToalScore, 
+    ZujuUser
+  </sql>
+  <select id="selectByExample" parameterType="ssm.model.ShijuanExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from shijuan
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="ssm.model.ShijuanExample">
+    delete from shijuan
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="ssm.model.Shijuan">
+    insert into shijuan (ShijuanId, CouId, ExamDay, 
+      ExamTime, ExamAdr, ClassId, 
+      TixinId, TixinScore, ToalScore, 
+      ZujuUser)
+    values (#{shijuanid,jdbcType=INTEGER}, #{couid,jdbcType=INTEGER}, #{examday,jdbcType=TIMESTAMP}, 
+      #{examtime,jdbcType=VARCHAR}, #{examadr,jdbcType=VARCHAR}, #{classid,jdbcType=INTEGER}, 
+      #{tixinid,jdbcType=INTEGER}, #{tixinscore,jdbcType=INTEGER}, #{toalscore,jdbcType=INTEGER}, 
+      #{zujuuser,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="ssm.model.Shijuan">
+    insert into shijuan
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="shijuanid != null">
+        ShijuanId,
+      </if>
+      <if test="couid != null">
+        CouId,
+      </if>
+      <if test="examday != null">
+        ExamDay,
+      </if>
+      <if test="examtime != null">
+        ExamTime,
+      </if>
+      <if test="examadr != null">
+        ExamAdr,
+      </if>
+      <if test="classid != null">
+        ClassId,
+      </if>
+      <if test="tixinid != null">
+        TixinId,
+      </if>
+      <if test="tixinscore != null">
+        TixinScore,
+      </if>
+      <if test="toalscore != null">
+        ToalScore,
+      </if>
+      <if test="zujuuser != null">
+        ZujuUser,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="shijuanid != null">
+        #{shijuanid,jdbcType=INTEGER},
+      </if>
+      <if test="couid != null">
+        #{couid,jdbcType=INTEGER},
+      </if>
+      <if test="examday != null">
+        #{examday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="examtime != null">
+        #{examtime,jdbcType=VARCHAR},
+      </if>
+      <if test="examadr != null">
+        #{examadr,jdbcType=VARCHAR},
+      </if>
+      <if test="classid != null">
+        #{classid,jdbcType=INTEGER},
+      </if>
+      <if test="tixinid != null">
+        #{tixinid,jdbcType=INTEGER},
+      </if>
+      <if test="tixinscore != null">
+        #{tixinscore,jdbcType=INTEGER},
+      </if>
+      <if test="toalscore != null">
+        #{toalscore,jdbcType=INTEGER},
+      </if>
+      <if test="zujuuser != null">
+        #{zujuuser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="ssm.model.ShijuanExample" resultType="java.lang.Long">
+    select count(*) from shijuan
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update shijuan
+    <set>
+      <if test="record.shijuanid != null">
+        ShijuanId = #{record.shijuanid,jdbcType=INTEGER},
+      </if>
+      <if test="record.couid != null">
+        CouId = #{record.couid,jdbcType=INTEGER},
+      </if>
+      <if test="record.examday != null">
+        ExamDay = #{record.examday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.examtime != null">
+        ExamTime = #{record.examtime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.examadr != null">
+        ExamAdr = #{record.examadr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.classid != null">
+        ClassId = #{record.classid,jdbcType=INTEGER},
+      </if>
+      <if test="record.tixinid != null">
+        TixinId = #{record.tixinid,jdbcType=INTEGER},
+      </if>
+      <if test="record.tixinscore != null">
+        TixinScore = #{record.tixinscore,jdbcType=INTEGER},
+      </if>
+      <if test="record.toalscore != null">
+        ToalScore = #{record.toalscore,jdbcType=INTEGER},
+      </if>
+      <if test="record.zujuuser != null">
+        ZujuUser = #{record.zujuuser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update shijuan
+    set ShijuanId = #{record.shijuanid,jdbcType=INTEGER},
+      CouId = #{record.couid,jdbcType=INTEGER},
+      ExamDay = #{record.examday,jdbcType=TIMESTAMP},
+      ExamTime = #{record.examtime,jdbcType=VARCHAR},
+      ExamAdr = #{record.examadr,jdbcType=VARCHAR},
+      ClassId = #{record.classid,jdbcType=INTEGER},
+      TixinId = #{record.tixinid,jdbcType=INTEGER},
+      TixinScore = #{record.tixinscore,jdbcType=INTEGER},
+      ToalScore = #{record.toalscore,jdbcType=INTEGER},
+      ZujuUser = #{record.zujuuser,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <resultMap id="BaseResultMap" type="ssm.model.Shijuan">
+    <result column="ShijuanId" jdbcType="INTEGER" property="shijuanid" />
+    <result column="CouId" jdbcType="INTEGER" property="couid" />
+    <result column="ExamDay" jdbcType="TIMESTAMP" property="examday" />
+    <result column="ExamTime" jdbcType="VARCHAR" property="examtime" />
+    <result column="ExamAdr" jdbcType="VARCHAR" property="examadr" />
+    <result column="ClassId" jdbcType="INTEGER" property="classid" />
+    <result column="TixinId" jdbcType="INTEGER" property="tixinid" />
+    <result column="TixinScore" jdbcType="INTEGER" property="tixinscore" />
+    <result column="ToalScore" jdbcType="INTEGER" property="toalscore" />
+    <result column="ZujuUser" jdbcType="VARCHAR" property="zujuuser" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ShijuanId, CouId, ExamDay, ExamTime, ExamAdr, ClassId, TixinId, TixinScore, ToalScore, 
+    ZujuUser
+  </sql>
+  <select id="selectByExample" parameterType="ssm.model.ShijuanExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from shijuan
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="ssm.model.ShijuanExample">
+    delete from shijuan
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="ssm.model.Shijuan">
+    insert into shijuan (ShijuanId, CouId, ExamDay, 
+      ExamTime, ExamAdr, ClassId, 
+      TixinId, TixinScore, ToalScore, 
+      ZujuUser)
+    values (#{shijuanid,jdbcType=INTEGER}, #{couid,jdbcType=INTEGER}, #{examday,jdbcType=TIMESTAMP}, 
+      #{examtime,jdbcType=VARCHAR}, #{examadr,jdbcType=VARCHAR}, #{classid,jdbcType=INTEGER}, 
+      #{tixinid,jdbcType=INTEGER}, #{tixinscore,jdbcType=INTEGER}, #{toalscore,jdbcType=INTEGER}, 
+      #{zujuuser,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="ssm.model.Shijuan">
+    insert into shijuan
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="shijuanid != null">
+        ShijuanId,
+      </if>
+      <if test="couid != null">
+        CouId,
+      </if>
+      <if test="examday != null">
+        ExamDay,
+      </if>
+      <if test="examtime != null">
+        ExamTime,
+      </if>
+      <if test="examadr != null">
+        ExamAdr,
+      </if>
+      <if test="classid != null">
+        ClassId,
+      </if>
+      <if test="tixinid != null">
+        TixinId,
+      </if>
+      <if test="tixinscore != null">
+        TixinScore,
+      </if>
+      <if test="toalscore != null">
+        ToalScore,
+      </if>
+      <if test="zujuuser != null">
+        ZujuUser,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="shijuanid != null">
+        #{shijuanid,jdbcType=INTEGER},
+      </if>
+      <if test="couid != null">
+        #{couid,jdbcType=INTEGER},
+      </if>
+      <if test="examday != null">
+        #{examday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="examtime != null">
+        #{examtime,jdbcType=VARCHAR},
+      </if>
+      <if test="examadr != null">
+        #{examadr,jdbcType=VARCHAR},
+      </if>
+      <if test="classid != null">
+        #{classid,jdbcType=INTEGER},
+      </if>
+      <if test="tixinid != null">
+        #{tixinid,jdbcType=INTEGER},
+      </if>
+      <if test="tixinscore != null">
+        #{tixinscore,jdbcType=INTEGER},
+      </if>
+      <if test="toalscore != null">
+        #{toalscore,jdbcType=INTEGER},
+      </if>
+      <if test="zujuuser != null">
+        #{zujuuser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="ssm.model.ShijuanExample" resultType="java.lang.Long">
+    select count(*) from shijuan
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update shijuan
+    <set>
+      <if test="record.shijuanid != null">
+        ShijuanId = #{record.shijuanid,jdbcType=INTEGER},
+      </if>
+      <if test="record.couid != null">
+        CouId = #{record.couid,jdbcType=INTEGER},
+      </if>
+      <if test="record.examday != null">
+        ExamDay = #{record.examday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.examtime != null">
+        ExamTime = #{record.examtime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.examadr != null">
+        ExamAdr = #{record.examadr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.classid != null">
+        ClassId = #{record.classid,jdbcType=INTEGER},
+      </if>
+      <if test="record.tixinid != null">
+        TixinId = #{record.tixinid,jdbcType=INTEGER},
+      </if>
+      <if test="record.tixinscore != null">
+        TixinScore = #{record.tixinscore,jdbcType=INTEGER},
+      </if>
+      <if test="record.toalscore != null">
+        ToalScore = #{record.toalscore,jdbcType=INTEGER},
+      </if>
+      <if test="record.zujuuser != null">
+        ZujuUser = #{record.zujuuser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update shijuan
+    set ShijuanId = #{record.shijuanid,jdbcType=INTEGER},
+      CouId = #{record.couid,jdbcType=INTEGER},
+      ExamDay = #{record.examday,jdbcType=TIMESTAMP},
+      ExamTime = #{record.examtime,jdbcType=VARCHAR},
+      ExamAdr = #{record.examadr,jdbcType=VARCHAR},
+      ClassId = #{record.classid,jdbcType=INTEGER},
+      TixinId = #{record.tixinid,jdbcType=INTEGER},
+      TixinScore = #{record.tixinscore,jdbcType=INTEGER},
+      ToalScore = #{record.toalscore,jdbcType=INTEGER},
+      ZujuUser = #{record.zujuuser,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update> -->
+</mapper>

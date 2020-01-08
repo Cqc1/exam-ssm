@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ssm.dao.ShitiMapper">
+  <resultMap id="BaseResultMap" type="ssm.model.Shiti">
+    <result column="ShiTiId" jdbcType="INTEGER" property="shitiid" />
+    <result column="CouId" jdbcType="INTEGER" property="couid" />
+    <result column="TixinId" jdbcType="INTEGER" property="tixinid" />
+    <result column="Degree" jdbcType="VARCHAR" property="degree" />
+    <result column="KnpoId" jdbcType="INTEGER" property="knpoid" />
+    <result column="QuFen" jdbcType="VARCHAR" property="qufen" />
+    <result column="ShitiContent" jdbcType="VARCHAR" property="shiticontent" />
+    <result column="Tubiao" jdbcType="VARCHAR" property="tubiao" />
+    <result column="Answer" jdbcType="VARCHAR" property="answer" />
+    <result column="Cishu" jdbcType="VARCHAR" property="cishu" />
+    <result column="PreTime" jdbcType="VARCHAR" property="pretime" />
+    <result column="AveTime" jdbcType="VARCHAR" property="avetime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ShiTiId, CouId, TixinId, Degree, KnpoId, QuFen, ShitiContent, Tubiao, Answer, Cishu, 
+    PreTime, AveTime
+  </sql>
+  <select id="selectByExample" parameterType="ssm.model.ShitiExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from shiti
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="ssm.model.ShitiExample">
+    delete from shiti
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="ssm.model.Shiti">
+    insert into shiti (ShiTiId, CouId, TixinId, 
+      Degree, KnpoId, QuFen, 
+      ShitiContent, Tubiao, Answer, 
+      Cishu, PreTime, AveTime
+      )
+    values (#{shitiid,jdbcType=INTEGER}, #{couid,jdbcType=INTEGER}, #{tixinid,jdbcType=INTEGER}, 
+      #{degree,jdbcType=VARCHAR}, #{knpoid,jdbcType=INTEGER}, #{qufen,jdbcType=VARCHAR}, 
+      #{shiticontent,jdbcType=VARCHAR}, #{tubiao,jdbcType=VARCHAR}, #{answer,jdbcType=VARCHAR}, 
+      #{cishu,jdbcType=VARCHAR}, #{pretime,jdbcType=VARCHAR}, #{avetime,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="ssm.model.Shiti">
+    insert into shiti
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="shitiid != null">
+        ShiTiId,
+      </if>
+      <if test="couid != null">
+        CouId,
+      </if>
+      <if test="tixinid != null">
+        TixinId,
+      </if>
+      <if test="degree != null">
+        Degree,
+      </if>
+      <if test="knpoid != null">
+        KnpoId,
+      </if>
+      <if test="qufen != null">
+        QuFen,
+      </if>
+      <if test="shiticontent != null">
+        ShitiContent,
+      </if>
+      <if test="tubiao != null">
+        Tubiao,
+      </if>
+      <if test="answer != null">
+        Answer,
+      </if>
+      <if test="cishu != null">
+        Cishu,
+      </if>
+      <if test="pretime != null">
+        PreTime,
+      </if>
+      <if test="avetime != null">
+        AveTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="shitiid != null">
+        #{shitiid,jdbcType=INTEGER},
+      </if>
+      <if test="couid != null">
+        #{couid,jdbcType=INTEGER},
+      </if>
+      <if test="tixinid != null">
+        #{tixinid,jdbcType=INTEGER},
+      </if>
+      <if test="degree != null">
+        #{degree,jdbcType=VARCHAR},
+      </if>
+      <if test="knpoid != null">
+        #{knpoid,jdbcType=INTEGER},
+      </if>
+      <if test="qufen != null">
+        #{qufen,jdbcType=VARCHAR},
+      </if>
+      <if test="shiticontent != null">
+        #{shiticontent,jdbcType=VARCHAR},
+      </if>
+      <if test="tubiao != null">
+        #{tubiao,jdbcType=VARCHAR},
+      </if>
+      <if test="answer != null">
+        #{answer,jdbcType=VARCHAR},
+      </if>
+      <if test="cishu != null">
+        #{cishu,jdbcType=VARCHAR},
+      </if>
+      <if test="pretime != null">
+        #{pretime,jdbcType=VARCHAR},
+      </if>
+      <if test="avetime != null">
+        #{avetime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="ssm.model.ShitiExample" resultType="java.lang.Long">
+    select count(*) from shiti
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update shiti
+    <set>
+      <if test="record.shitiid != null">
+        ShiTiId = #{record.shitiid,jdbcType=INTEGER},
+      </if>
+      <if test="record.couid != null">
+        CouId = #{record.couid,jdbcType=INTEGER},
+      </if>
+      <if test="record.tixinid != null">
+        TixinId = #{record.tixinid,jdbcType=INTEGER},
+      </if>
+      <if test="record.degree != null">
+        Degree = #{record.degree,jdbcType=VARCHAR},
+      </if>
+      <if test="record.knpoid != null">
+        KnpoId = #{record.knpoid,jdbcType=INTEGER},
+      </if>
+      <if test="record.qufen != null">
+        QuFen = #{record.qufen,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shiticontent != null">
+        ShitiContent = #{record.shiticontent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tubiao != null">
+        Tubiao = #{record.tubiao,jdbcType=VARCHAR},
+      </if>
+      <if test="record.answer != null">
+        Answer = #{record.answer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cishu != null">
+        Cishu = #{record.cishu,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pretime != null">
+        PreTime = #{record.pretime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.avetime != null">
+        AveTime = #{record.avetime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update shiti
+    set ShiTiId = #{record.shitiid,jdbcType=INTEGER},
+      CouId = #{record.couid,jdbcType=INTEGER},
+      TixinId = #{record.tixinid,jdbcType=INTEGER},
+      Degree = #{record.degree,jdbcType=VARCHAR},
+      KnpoId = #{record.knpoid,jdbcType=INTEGER},
+      QuFen = #{record.qufen,jdbcType=VARCHAR},
+      ShitiContent = #{record.shiticontent,jdbcType=VARCHAR},
+      Tubiao = #{record.tubiao,jdbcType=VARCHAR},
+      Answer = #{record.answer,jdbcType=VARCHAR},
+      Cishu = #{record.cishu,jdbcType=VARCHAR},
+      PreTime = #{record.pretime,jdbcType=VARCHAR},
+      AveTime = #{record.avetime,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <resultMap id="BaseResultMap" type="ssm.model.Shiti">
+    <result column="ShiTiId" jdbcType="INTEGER" property="shitiid" />
+    <result column="CouId" jdbcType="INTEGER" property="couid" />
+    <result column="TixinId" jdbcType="INTEGER" property="tixinid" />
+    <result column="Degree" jdbcType="VARCHAR" property="degree" />
+    <result column="KnpoId" jdbcType="INTEGER" property="knpoid" />
+    <result column="QuFen" jdbcType="VARCHAR" property="qufen" />
+    <result column="ShitiContent" jdbcType="VARCHAR" property="shiticontent" />
+    <result column="Tubiao" jdbcType="VARCHAR" property="tubiao" />
+    <result column="Answer" jdbcType="VARCHAR" property="answer" />
+    <result column="Cishu" jdbcType="VARCHAR" property="cishu" />
+    <result column="PreTime" jdbcType="VARCHAR" property="pretime" />
+    <result column="AveTime" jdbcType="VARCHAR" property="avetime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ShiTiId, CouId, TixinId, Degree, KnpoId, QuFen, ShitiContent, Tubiao, Answer, Cishu, 
+    PreTime, AveTime
+  </sql>
+  <select id="selectByExample" parameterType="ssm.model.ShitiExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from shiti
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="ssm.model.ShitiExample">
+    delete from shiti
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="ssm.model.Shiti">
+    insert into shiti (ShiTiId, CouId, TixinId, 
+      Degree, KnpoId, QuFen, 
+      ShitiContent, Tubiao, Answer, 
+      Cishu, PreTime, AveTime
+      )
+    values (#{shitiid,jdbcType=INTEGER}, #{couid,jdbcType=INTEGER}, #{tixinid,jdbcType=INTEGER}, 
+      #{degree,jdbcType=VARCHAR}, #{knpoid,jdbcType=INTEGER}, #{qufen,jdbcType=VARCHAR}, 
+      #{shiticontent,jdbcType=VARCHAR}, #{tubiao,jdbcType=VARCHAR}, #{answer,jdbcType=VARCHAR}, 
+      #{cishu,jdbcType=VARCHAR}, #{pretime,jdbcType=VARCHAR}, #{avetime,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="ssm.model.Shiti">
+    insert into shiti
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="shitiid != null">
+        ShiTiId,
+      </if>
+      <if test="couid != null">
+        CouId,
+      </if>
+      <if test="tixinid != null">
+        TixinId,
+      </if>
+      <if test="degree != null">
+        Degree,
+      </if>
+      <if test="knpoid != null">
+        KnpoId,
+      </if>
+      <if test="qufen != null">
+        QuFen,
+      </if>
+      <if test="shiticontent != null">
+        ShitiContent,
+      </if>
+      <if test="tubiao != null">
+        Tubiao,
+      </if>
+      <if test="answer != null">
+        Answer,
+      </if>
+      <if test="cishu != null">
+        Cishu,
+      </if>
+      <if test="pretime != null">
+        PreTime,
+      </if>
+      <if test="avetime != null">
+        AveTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="shitiid != null">
+        #{shitiid,jdbcType=INTEGER},
+      </if>
+      <if test="couid != null">
+        #{couid,jdbcType=INTEGER},
+      </if>
+      <if test="tixinid != null">
+        #{tixinid,jdbcType=INTEGER},
+      </if>
+      <if test="degree != null">
+        #{degree,jdbcType=VARCHAR},
+      </if>
+      <if test="knpoid != null">
+        #{knpoid,jdbcType=INTEGER},
+      </if>
+      <if test="qufen != null">
+        #{qufen,jdbcType=VARCHAR},
+      </if>
+      <if test="shiticontent != null">
+        #{shiticontent,jdbcType=VARCHAR},
+      </if>
+      <if test="tubiao != null">
+        #{tubiao,jdbcType=VARCHAR},
+      </if>
+      <if test="answer != null">
+        #{answer,jdbcType=VARCHAR},
+      </if>
+      <if test="cishu != null">
+        #{cishu,jdbcType=VARCHAR},
+      </if>
+      <if test="pretime != null">
+        #{pretime,jdbcType=VARCHAR},
+      </if>
+      <if test="avetime != null">
+        #{avetime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="ssm.model.ShitiExample" resultType="java.lang.Long">
+    select count(*) from shiti
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update shiti
+    <set>
+      <if test="record.shitiid != null">
+        ShiTiId = #{record.shitiid,jdbcType=INTEGER},
+      </if>
+      <if test="record.couid != null">
+        CouId = #{record.couid,jdbcType=INTEGER},
+      </if>
+      <if test="record.tixinid != null">
+        TixinId = #{record.tixinid,jdbcType=INTEGER},
+      </if>
+      <if test="record.degree != null">
+        Degree = #{record.degree,jdbcType=VARCHAR},
+      </if>
+      <if test="record.knpoid != null">
+        KnpoId = #{record.knpoid,jdbcType=INTEGER},
+      </if>
+      <if test="record.qufen != null">
+        QuFen = #{record.qufen,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shiticontent != null">
+        ShitiContent = #{record.shiticontent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tubiao != null">
+        Tubiao = #{record.tubiao,jdbcType=VARCHAR},
+      </if>
+      <if test="record.answer != null">
+        Answer = #{record.answer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cishu != null">
+        Cishu = #{record.cishu,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pretime != null">
+        PreTime = #{record.pretime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.avetime != null">
+        AveTime = #{record.avetime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update shiti
+    set ShiTiId = #{record.shitiid,jdbcType=INTEGER},
+      CouId = #{record.couid,jdbcType=INTEGER},
+      TixinId = #{record.tixinid,jdbcType=INTEGER},
+      Degree = #{record.degree,jdbcType=VARCHAR},
+      KnpoId = #{record.knpoid,jdbcType=INTEGER},
+      QuFen = #{record.qufen,jdbcType=VARCHAR},
+      ShitiContent = #{record.shiticontent,jdbcType=VARCHAR},
+      Tubiao = #{record.tubiao,jdbcType=VARCHAR},
+      Answer = #{record.answer,jdbcType=VARCHAR},
+      Cishu = #{record.cishu,jdbcType=VARCHAR},
+      PreTime = #{record.pretime,jdbcType=VARCHAR},
+      AveTime = #{record.avetime,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

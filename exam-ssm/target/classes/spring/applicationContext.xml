@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+<!-- 数据库连接池 -->
+	<!-- 数据源定义 -->      
+	<!-- <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">         
+	    <property name="locations">              
+	       <list>                  
+	          <value>classpath:/config/db.properties</value>  		
+	          <value>classpath:/config/redis.properties</value>            
+	          </list>          
+	    </property>     
+	 </bean>  -->
+    <!-- redis数据源 
+    <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">		
+         <property name="maxIdle" value="${redis.maxIdle}" />		
+         <property name="maxTotal" value="${redis.maxActive}" />		
+         <property name="maxWaitMillis" value="${redis.maxWait}" />		
+         <property name="testOnBorrow" value="${redis.testOnBorrow}" />	
+    </bean>	
+    -->	
+    <!-- Spring-redis连接池管理工厂	
+    <bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" p:host-name="${redis.host}" p:port="${redis.port}" p:password="${redis.pass}"	p:pool-config-ref="poolConfig" /> -->	
+    <!-- 使用中间类解决RedisCache.jedisConnectionFactory的静态注入，从而使MyBatis实现第三方缓存 	
+    <bean id="redisCacheTransfer" class="ssm.cache.RedisCacheTransfer">		
+         <property name="jedisConnectionFactory" ref="jedisConnectionFactory" />	
+    </bean>
+-->
+    <!-- 加载配置文件 -->
+   <!--  <context:property-placeholder location="classpath:/config/db.properties"/> -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+        <property name="url" value="jdbc:mysql://localhost:3308/exam?characterEncoding=utf-8&amp;serverTimezone=UTC&amp;useSSL=false"></property>
+        <property name="username" value="root"></property>
+        <property name="password" value="123"></property>
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"></property>
+        <property name="maxActive" value="10"></property>
+        <property name="minIdle" value="5"></property>
+    </bean>
+    <!-- 让spring管理sqlsessionfactory 使用 mybatis 和 spring 整合包 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 数据库连接池 -->
+        <property name="dataSource" ref="dataSource"></property>
+        <!-- 加载mybatis 的全局属性 -->
+        <property name="configLocation" value="classpath:mybatis/mybatis-conf.xml"></property>
+        <!--扫描 XXXmapper.xml映射文件,配置扫描的路径-->
+        <property name="mapperLocations" value="classpath:mapper/*.xml"></property>
+    </bean>    
+    <!-- 配置扫描包，加载mapper代理对象   mybatis与spring整合包在spring配置文件中扫描mapper接口 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+        <property name="basePackage" value="ssm.dao"></property>
+    </bean>
+ <!-- 配置事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!-- 数据源 -->
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <!-- 传播行为 -->
+            <tx:method name="save*" propagation="REQUIRED"/>
+            <tx:method name="insert*" propagation="REQUIRED"/>
+            <tx:method name="add*" propagation="REQUIRED"/>
+            <tx:method name="create*" propagation="REQUIRED"/>
+            <tx:method name="delete*" propagation="REQUIRED"/>
+            <tx:method name="update*" propagation="REQUIRED"/>
+            <tx:method name="find*" propagation="SUPPORTS" read-only="true"/>
+            <tx:method name="select*" propagation="SUPPORTS" read-only="true"/>
+            <tx:method name="get*" propagation="SUPPORTS" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+    <!-- 切面 -->
+    <aop:config>
+        <aop:advisor advice-ref="txAdvice" pointcut="execution(* ssm.interceptor.*.*(..))"/>
+    </aop:config>
+    <!--开启事务注解扫描-->
+    <tx:annotation-driven transaction-manager="transactionManager"></tx:annotation-driven>
+
+</beans>

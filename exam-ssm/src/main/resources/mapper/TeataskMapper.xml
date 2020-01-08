@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ssm.dao.TeataskMapper">
+  <resultMap id="BaseResultMap" type="ssm.model.Teatask">
+    <result column="Term" jdbcType="VARCHAR" property="term" />
+    <result column="TeaId" jdbcType="INTEGER" property="teaid" />
+    <result column="CouId" jdbcType="INTEGER" property="couid" />
+    <result column="ClassId" jdbcType="INTEGER" property="classid" />
+  </resultMap>
+  
+  <!-- 自定义方法 -->
+   <select id="getById" resultMap="TeataskResultMap">
+      select * from teatask,teacher,course,class where 
+      teatask.TeaId=teacher.TeaId and teatask.CouId=course.CouId 
+      and teatask.ClassId=class.ClassId and teatask.TaskId=#{taskid}
+  </select>
+  
+  <select id="findAll" resultMap="TeataskResultMap">
+      select * from teatask,teacher,course,class where 
+      teatask.TeaId=teacher.TeaId and teatask.CouId=course.CouId 
+      and teatask.ClassId=class.ClassId
+  </select>
+  
+  <select id="queryfind" resultMap="TeataskResultMap">
+      select * from teatask,teacher,course,class
+      <where>
+            <if test="#{query}!=null">
+            ${type} like CONCAT('%',#{query},'%')
+            </if>                    
+      </where>
+      and teatask.TeaId=teacher.TeaId and teatask.CouId=course.CouId 
+      and teatask.ClassId=class.ClassId
+  </select>
+  
+  <delete id="deleteByid">
+      delete from teatask where TaskId=#{taskid}
+  </delete>
+  
+  <update id="updateByid" parameterType="teatask">
+      update teatask set TaskId=#{taskid},Term=#{term},TeaId=#{teaid},CouId=#{couid},ClassId=#{classid} where teatask.TaskId=#{taskid} 
+  </update>
+  
+  <insert id="addTask" parameterType="teatask">
+      insert into teatask(Term,TeaId,CouId,ClassId) values(#{term},#{teaid},#{couid},#{classid}) 
+  </insert>
+  
+  <select id="selectByMore" resultMap="TeataskResultMap">
+      select * from teatask,teacher,course,class where
+      teatask.TeaId=#{teaid} and teatask.CouId=#{couid} and teatask.ClassId=#{classid} and  
+      teatask.TeaId=teacher.TeaId and teatask.CouId=course.CouId 
+      and teatask.ClassId=class.ClassId
+  </select>
+  
+  <select id="getByteaId" resultMap="TeataskResultMap">
+      select * from teatask,teacher,course,class where
+      teatask.TeaId=teacher.TeaId and teatask.CouId=course.CouId
+      and teatask.ClassId=class.ClassId and teatask.TeaId=#{teaid}
+  </select>
+  
+  <!-- 使用resultMap映射实体类和字段之间的一一对应关系 -->
+  <resultMap type="ssm.model.Teatask" id="TeataskResultMap">
+        <result column="Term" jdbcType="VARCHAR" property="term" />
+	    <result column="TeaId" jdbcType="INTEGER" property="teaid" />
+	    <result column="CouId" jdbcType="INTEGER" property="couid" />
+	    <result column="ClassId" jdbcType="INTEGER" property="classid" />	         
+        <association property="teacher" javaType="ssm.model.Teacher">
+            <id column="TeaId" jdbcType="INTEGER" property="teaid" />
+		    <result column="TeaName" jdbcType="VARCHAR" property="teaname" />
+		    <result column="TeaPwd" jdbcType="VARCHAR" property="teapwd" />
+		    <result column="TeaSex" jdbcType="VARCHAR" property="teasex" />
+		    <result column="YuId" jdbcType="INTEGER" property="yuid" />
+		    <result column="TeaMail" jdbcType="VARCHAR" property="teamail" />
+		    <result column="TeaNum" jdbcType="INTEGER" property="teanum" />
+       </association>
+       <association property="course" javaType="ssm.model.Course">
+            <id column="CouId" jdbcType="INTEGER" property="couid" />
+		    <result column="CouName" jdbcType="VARCHAR" property="couname" />
+		    <result column="Credit" jdbcType="INTEGER" property="credit" />
+       </association> 
+       <association property="clas" javaType="ssm.model.Class">
+            <id column="ClassId" jdbcType="INTEGER" property="classid" />
+		    <result column="ClaName" jdbcType="VARCHAR" property="claname" />
+		    <result column="ProId" jdbcType="INTEGER" property="proid" />
+       </association>        
+    </resultMap>
+  <!-- <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    TaskId, Term, TeaId, CouId, ClassId
+  </sql>
+  <select id="selectByExample" parameterType="ssm.model.TeataskExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from teatask
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="ssm.model.TeataskExample">
+    delete from teatask
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="ssm.model.Teatask">
+    insert into teatask (TaskId, Term, TeaId, 
+      CouId, ClassId)
+    values (#{taskid,jdbcType=INTEGER}, #{term,jdbcType=VARCHAR}, #{teaid,jdbcType=INTEGER}, 
+      #{couid,jdbcType=INTEGER}, #{classid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="ssm.model.Teatask">
+    insert into teatask
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="taskid != null">
+        TaskId,
+      </if>
+      <if test="term != null">
+        Term,
+      </if>
+      <if test="teaid != null">
+        TeaId,
+      </if>
+      <if test="couid != null">
+        CouId,
+      </if>
+      <if test="classid != null">
+        ClassId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="taskid != null">
+        #{taskid,jdbcType=INTEGER},
+      </if>
+      <if test="term != null">
+        #{term,jdbcType=VARCHAR},
+      </if>
+      <if test="teaid != null">
+        #{teaid,jdbcType=INTEGER},
+      </if>
+      <if test="couid != null">
+        #{couid,jdbcType=INTEGER},
+      </if>
+      <if test="classid != null">
+        #{classid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="ssm.model.TeataskExample" resultType="java.lang.Long">
+    select count(*) from teatask
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update teatask
+    <set>
+      <if test="record.taskid != null">
+        TaskId = #{record.taskid,jdbcType=INTEGER},
+      </if>
+      <if test="record.term != null">
+        Term = #{record.term,jdbcType=VARCHAR},
+      </if>
+      <if test="record.teaid != null">
+        TeaId = #{record.teaid,jdbcType=INTEGER},
+      </if>
+      <if test="record.couid != null">
+        CouId = #{record.couid,jdbcType=INTEGER},
+      </if>
+      <if test="record.classid != null">
+        ClassId = #{record.classid,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update teatask
+    set TaskId = #{record.taskid,jdbcType=INTEGER},
+      Term = #{record.term,jdbcType=VARCHAR},
+      TeaId = #{record.teaid,jdbcType=INTEGER},
+      CouId = #{record.couid,jdbcType=INTEGER},
+      ClassId = #{record.classid,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <resultMap id="BaseResultMap" type="ssm.model.Teatask">
+    <result column="Term" jdbcType="VARCHAR" property="term" />
+    <result column="TeaId" jdbcType="INTEGER" property="teaid" />
+    <result column="CouId" jdbcType="INTEGER" property="couid" />
+    <result column="ClassId" jdbcType="INTEGER" property="classid" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    Term, TeaId, CouId, ClassId
+  </sql>
+  <select id="selectByExample" parameterType="ssm.model.TeataskExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from teatask
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="ssm.model.TeataskExample">
+    delete from teatask
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="ssm.model.Teatask">
+    insert into teatask (Term, TeaId, CouId, 
+      ClassId)
+    values (#{term,jdbcType=VARCHAR}, #{teaid,jdbcType=INTEGER}, #{couid,jdbcType=INTEGER}, 
+      #{classid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="ssm.model.Teatask">
+    insert into teatask
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="term != null">
+        Term,
+      </if>
+      <if test="teaid != null">
+        TeaId,
+      </if>
+      <if test="couid != null">
+        CouId,
+      </if>
+      <if test="classid != null">
+        ClassId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="term != null">
+        #{term,jdbcType=VARCHAR},
+      </if>
+      <if test="teaid != null">
+        #{teaid,jdbcType=INTEGER},
+      </if>
+      <if test="couid != null">
+        #{couid,jdbcType=INTEGER},
+      </if>
+      <if test="classid != null">
+        #{classid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="ssm.model.TeataskExample" resultType="java.lang.Long">
+    select count(*) from teatask
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update teatask
+    <set>
+      <if test="record.term != null">
+        Term = #{record.term,jdbcType=VARCHAR},
+      </if>
+      <if test="record.teaid != null">
+        TeaId = #{record.teaid,jdbcType=INTEGER},
+      </if>
+      <if test="record.couid != null">
+        CouId = #{record.couid,jdbcType=INTEGER},
+      </if>
+      <if test="record.classid != null">
+        ClassId = #{record.classid,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update teatask
+    set Term = #{record.term,jdbcType=VARCHAR},
+      TeaId = #{record.teaid,jdbcType=INTEGER},
+      CouId = #{record.couid,jdbcType=INTEGER},
+      ClassId = #{record.classid,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update> -->
+</mapper>

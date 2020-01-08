@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ssm.dao.YuanxiMapper">
+  <resultMap id="BaseResultMap" type="ssm.model.Yuanxi">
+    <result column="YuId" jdbcType="INTEGER" property="yuid" />
+    <result column="YuNam" jdbcType="VARCHAR" property="yunam" />
+  </resultMap>
+  
+  <!-- 自定义方法 -->
+  <select id="findAll" resultType="yuanxi">
+      select * from yuanxi
+  </select>
+  
+   <select id="getById" resultType="yuanxi">
+      select * from yuanxi where  YuId=#{yuid}
+  </select>
+  
+  <select id="getByNam" resultType="yuanxi">
+      select * from yuanxi where  YuNam=#{yunam}
+  </select>
+  
+  <select id="queryfind" resultType="yuanxi">
+      select * from yuanxi
+      <where>
+            <if test="#{query}!=null">
+            ${type} like CONCAT('%',#{query},'%')
+            </if>                    
+      </where> 
+  </select>
+  
+  <delete id="deleteByid">
+      delete from yuanxi where YuId=#{yuid}
+  </delete>
+  
+  <update id="updateByid" >
+      update yuanxi set YuId=#{yuid},YuNam=#{yunam} where YuId=#{yuid} 
+  </update>
+  
+  <insert id="addYuxi" >
+      insert into yuanxi values(#{yuid},#{yunam}) 
+  </insert>
+  
+  <!-- <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    YuId, YuNam
+  </sql>
+  <select id="selectByExample" parameterType="ssm.model.YuanxiExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from yuanxi
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="ssm.model.YuanxiExample">
+    delete from yuanxi
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="ssm.model.Yuanxi">
+    insert into yuanxi (YuId, YuNam)
+    values (#{yuid,jdbcType=INTEGER}, #{yunam,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="ssm.model.Yuanxi">
+    insert into yuanxi
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="yuid != null">
+        YuId,
+      </if>
+      <if test="yunam != null">
+        YuNam,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="yuid != null">
+        #{yuid,jdbcType=INTEGER},
+      </if>
+      <if test="yunam != null">
+        #{yunam,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="ssm.model.YuanxiExample" resultType="java.lang.Long">
+    select count(*) from yuanxi
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update yuanxi
+    <set>
+      <if test="record.yuid != null">
+        YuId = #{record.yuid,jdbcType=INTEGER},
+      </if>
+      <if test="record.yunam != null">
+        YuNam = #{record.yunam,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update yuanxi
+    set YuId = #{record.yuid,jdbcType=INTEGER},
+      YuNam = #{record.yunam,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <resultMap id="BaseResultMap" type="ssm.model.Yuanxi">
+    <result column="YuId" jdbcType="INTEGER" property="yuid" />
+    <result column="YuNam" jdbcType="VARCHAR" property="yunam" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    YuId, YuNam
+  </sql>
+  <select id="selectByExample" parameterType="ssm.model.YuanxiExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from yuanxi
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="ssm.model.YuanxiExample">
+    delete from yuanxi
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="ssm.model.Yuanxi">
+    insert into yuanxi (YuId, YuNam)
+    values (#{yuid,jdbcType=INTEGER}, #{yunam,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="ssm.model.Yuanxi">
+    insert into yuanxi
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="yuid != null">
+        YuId,
+      </if>
+      <if test="yunam != null">
+        YuNam,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="yuid != null">
+        #{yuid,jdbcType=INTEGER},
+      </if>
+      <if test="yunam != null">
+        #{yunam,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="ssm.model.YuanxiExample" resultType="java.lang.Long">
+    select count(*) from yuanxi
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update yuanxi
+    <set>
+      <if test="record.yuid != null">
+        YuId = #{record.yuid,jdbcType=INTEGER},
+      </if>
+      <if test="record.yunam != null">
+        YuNam = #{record.yunam,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update yuanxi
+    set YuId = #{record.yuid,jdbcType=INTEGER},
+      YuNam = #{record.yunam,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update> -->
+</mapper>
