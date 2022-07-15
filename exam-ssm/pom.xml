@@ -15,7 +15,7 @@
 		<commons-logging>1.1</commons-logging>
 		<mysql-connector-java>8.0.12</mysql-connector-java>
 		<pagehelper>5.0.0</pagehelper>
-		<jackson>2.9.0</jackson>
+		<jackson>2.12.6.1</jackson>
 		<jstl>1.2</jstl>
 	</properties>
 
